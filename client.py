@@ -28,19 +28,18 @@ if __name__ == '__main__':
         print("Error: host name could not be resolved")
         sys.exit(1)
 
-    # create socket for client to communicate with hostname
-    client = socket.socket()
-    try:
-        client.connect((hostname, port))
-    except socket.error:
-        print("Error: could not establish connection with host")
-        sys.exit(1)
+    # create client socket
+    with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as client:
+        # connect to hostname on the specified port
+        try:
+            client.connect((hostname, port))
+        except socket.error:
+            print("Error: could not establish connection with host")
+            client.close()
+            sys.exit(1)
 
-    # send HTTP request to hostname and receive answer
-    request = f"GET / HTTP/1.1\r\nHost: {hostname}\r\n\r\n"
-    client.sendall(request.encode())
-    response = client.recv(1024)
-    print(response.decode())
-
-    client.close()
-
+        # send HTTP request to hostname and receive answer
+        request = f"GET / HTTP/1.1\r\nHost: {hostname}\r\n\r\n"
+        client.sendall(request.encode())
+        response = client.recv(1024)
+        print(response.decode())

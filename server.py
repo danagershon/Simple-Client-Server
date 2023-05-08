@@ -20,31 +20,34 @@ if __name__ == '__main__':
         print("Error: port number is illegal")
         sys.exit(1)
 
-    # check if port number is in range of private ports
+    # check if port number is in not range of registered ports
     if port < 1024:
         print("Error: port number is a registered port")
         sys.exit(1)
 
-    # create socket for server to accept connections with clients
-    server = socket.socket()
-    try:
-        server.bind(('localhost', port))
-    except socket.error:
-        print("Error: could not bind port")
-        sys.exit(1)
+    # create socket for server to accept client connections
+    with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as server:
+        # assign localhost address and the specified port to the socket
+        try:
+            server.bind(('localhost', port))
+        except socket.error:
+            print("Error: could not bind port")
+            sys.exit(1)
 
-    server.listen(1)
+        # start listening on the specified port for incoming client connections
+        server.listen(1)
 
-    client_connection, client_address = server.accept()
-    client_data = client_connection.recv(1024)
+        while True:
+            # accept client connection
+            client_connection, client_address = server.accept()
+            client_data = client_connection.recv(1024)
 
-    page_file = open("example.html")
-    page_content = page_file.read()
-    page_file.close()
+            with client_connection:
+                # open the supplied simple HTML page file
+                web_page_file = open("example.html")
+                web_page_content = web_page_file.read()
+                web_page_file.close()
 
-    response = f"HTTP/1.1 200 OK\r\nContent-Type: text/html\r\n\r\n" + page_content
-    client_connection.sendall(response.encode())
-
-    client_connection.close()
-    server.close()
-
+                # send the HTML page to the client
+                response = f"HTTP/1.1 200 OK\r\nContent-Type: text/html\r\n\r\n" + web_page_content
+                client_connection.sendall(response.encode())
