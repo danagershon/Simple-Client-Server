@@ -34,20 +34,20 @@ if __name__ == '__main__':
             print("Error: could not bind port")
             sys.exit(1)
 
-        # start listening on the specified port for incoming client connections
+        # start listening on the specified port for incoming client connection
         server.listen(1)
 
-        while True:
-            # accept client connection
-            client_connection, client_address = server.accept()
+        # accept client connection
+        client_connection, client_address = server.accept()
+
+        with client_connection:
             client_data = client_connection.recv(1024)
 
-            with client_connection:
-                # open the supplied simple HTML page file
-                web_page_file = open("example.html")
-                web_page_content = web_page_file.read()
-                web_page_file.close()
+            # open the supplied simple HTML page file
+            web_page_file = open("example.html")
+            web_page_content = web_page_file.read()
+            web_page_file.close()
 
-                # send the HTML page to the client
-                response = f"HTTP/1.1 200 OK\r\nContent-Type: text/html\r\n\r\n" + web_page_content
-                client_connection.sendall(response.encode())
+            # send the HTML page to the client
+            response = f"HTTP/1.1 200 OK\r\nContent-Type: text/html\r\n\r\n" + web_page_content
+            client_connection.sendall(response.encode())
