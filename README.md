@@ -21,4 +21,5 @@ Run: python server.py port
 
 
 • example.html:
+
 simple web page for the server to send to clients
