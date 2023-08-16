@@ -2,19 +2,21 @@ Network Security Course Spring 2023 HW2: implementing simple client-server progr
 
 **files:**
 
-• client.py:
-implementation of client program using Python socket module. 
+• client.py: client program 
 
-use: python client.py hostname port
+The program connects to a specified host on the specified port and sends an HTTP GET request.
 
-the program connects to a specified host on the specified port and sends an HTTP GET request
+Uses the Python socket module.
 
-• server.py
-implementation of server program using python socket module. 
+Run: python client.py hostname port
 
-use: python server.py port
+• server.py: server program. 
 
-the program listens on the specified port for client connections and sends "example.html"
+The program listens on the specified port for client connections and sends "example.html".
+
+Uses the Python socket module.
+
+Run: python server.py port
 
 • example.html:
 simple web page for the server to send to clients
