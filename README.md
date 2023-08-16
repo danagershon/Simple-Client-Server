@@ -1,4 +1,4 @@
-Network Security Course Spring 2023 HW2: implementing simple client-server programs in Python
+Network Security Course HW2: implementing simple client-server programs in Python
 
 **files:**
 
